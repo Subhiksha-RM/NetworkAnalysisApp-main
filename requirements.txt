@@ -5,6 +5,7 @@ cachetools==5.3.3
 certifi==2024.6.2
 charset-normalizer==3.3.2
 click==8.1.7
+colorama==0.4.6
 contourpy==1.2.1
 cycler==0.12.1
 fonttools==4.53.0
@@ -20,6 +21,7 @@ markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 matplotlib==3.9.0
 mdurl==0.1.2
+netcenlib==0.2.1
 networkx==3.3
 numpy==1.26.4
 packaging==24.1
@@ -50,3 +52,4 @@ typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
 uuid==1.30
+watchdog==4.0.1
