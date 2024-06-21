@@ -53,8 +53,8 @@ def process_flow(edge_data, key_prefix):
     
     if input_features != "" :
         features1= [int(f.strip()) for f in input_features.split(',')]
-        features =[f for f in features1 if f in edge_data["feature"].unique()]
-        st.write("Yes", features)
+        features = [f for f in features1 if f in edge_data["feature"].unique()]
+        #st.write("Yes", features)
     else:
         features = edge_data["feature"].unique()
     
