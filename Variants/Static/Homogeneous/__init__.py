@@ -51,8 +51,10 @@ def process_flow(edge_data, key_prefix):
     selected_algorithm = st.selectbox("Algorithm", options=algorithm_options, key=f'{key_prefix}_algorithm')
     input_features = st.text_input("Comma separated features (Empty for all features)", key=f'{key_prefix}_features')
     
-    if input_features != "":
-        features = [int(f.strip()) for f in input_features.split(',')]
+    if input_features != "" :
+        features1= [int(f.strip()) for f in input_features.split(',')]
+        features =[f for f in features1 if f in edge_data["feature"].unique()]
+        st.write("Yes", features)
     else:
         features = edge_data["feature"].unique()
     
