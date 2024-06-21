@@ -63,20 +63,26 @@ def process_flow(edge_data, key_prefix):
     
     if selected_algorithm == algorithm_options[0]:
         scores = aggregate_scores(filtered)
+        
     if selected_algorithm == algorithm_options[1]:
         scores = coreness_centrality(filtered)
+        st.write("Coreness Centrality: Tightly connected group of nodes in a n/w with max edges, Connection: Highlights the major core, Supply Chain: Strong interconnection with other major nodes")
     elif selected_algorithm == algorithm_options[2]:
         scores = eigenvector_centrality(filtered)
     elif selected_algorithm == algorithm_options[3]:
         scores = laplacian_centrality(filtered)
+        st.write("Laplacian Centrality: Measures a node’s importance by deleting the node in the n/w, Connection: How much do a node deletion affect the n/w?, Supply Chain: Disruption / Deletion – affects whole n/w")
     elif selected_algorithm == algorithm_options[4]:
         scores = katz_centrality(filtered)
+        st.write("Katz Centrality: Influence of node on its neighbour & their neighbours, Connection: How does this node influence other indirectly?, Supply Chain: Manufacturer – connected to a supplier – if it influences the neighbour of the supplier")
     elif selected_algorithm == algorithm_options[5]:
         scores = degree_centrality(filtered)
+        st.write("Degree Centrality: No. of Edges Connecting a Node, Connection: How significant is its connection?, Supply Chain: Flow of Goods")
     elif selected_algorithm == algorithm_options[6]:
         scores = betweeness_centrality(filtered)
     elif selected_algorithm == algorithm_options[7]:
         scores = percolation_centrality(filtered)
+        st.write("Percolation Centrality: Node that causes ripple effect throughout the n/w, Connection: To identify if it connects any major nodes?, Supply Chain: Disruption in Source node – affects other nodes")
     elif selected_algorithm == algorithm_options[8]:
         scores = pagerank_centrality(filtered)
     elif selected_algorithm == algorithm_options[9]:
@@ -85,10 +91,13 @@ def process_flow(edge_data, key_prefix):
         scores = local_clustering_coeff_centrality(filtered)
     elif selected_algorithm == algorithm_options[11]:
         scores = cluster_rank_centrality(filtered)
+        st.write("ClusterRank Centrality: Influence of a node on its immediate neighbours and how well the neighbours are clustered together, Connection: How well is the node connected and clustered?,Supply Chain: Identify Key suppliers/customers, Risk assessment, optimization of allocation, improve resilience")
     elif selected_algorithm == algorithm_options[12]:
         scores = max_neighborhood_centrality(filtered)
+        st.write("Max Neighborhood Centrality: Measures a node’s largest neighbourhood without the node, Connection: How central is an entity in the n/w?, Supply Chain: Supplier supplying more than 1 materials, Distributor handling max no. of product distribution.")
     elif selected_algorithm == algorithm_options[13]:
         scores = semi_local_centrality(filtered)
+        st.write("Semi Local Centrality: Degree of a node, degree of its neighbours (degree- no.of edges), Connection: What is the influence of the node on others?, Supply Chain: Disruption – how it affects the neighbours and the n/w")
     elif selected_algorithm == algorithm_options[14]:
         scores = load_centrality(filtered)
         
