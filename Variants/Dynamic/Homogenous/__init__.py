@@ -1,13 +1,11 @@
 import streamlit as st
-from uuid import uuid4
-
-from visualize import visualize_edge_data, visualize_multiple_graphs, visualize_graphs_with_scores
+from visualize import visualize_edge_data, visualize_multiple_graphs, visualize_graphs_with_scores, visualize_dynamic_graph
 from utils import convert_to_graph
 
 from Variants.Static.Homogeneous.Algorithms import aggregate_scores, coreness_centrality, degree_centrality, eigenvector_centrality, katz_centrality, laplacian_centrality, betweeness_centrality, percolation_centrality, pagerank_centrality, closeness_centrality,local_clustering_coeff_centrality, cluster_rank_centrality,max_neighborhood_centrality,semi_local_centrality,load_centrality
 
-def static_homogenous(node_data, edge_data):
-    st.title("Static Graph Analysis")
+def dynamic_homogenous(node_data, edge_data):
+    st.title("Dynamic Graph Analysis")
     
     col1, col2 = st.columns(2)
     
@@ -19,13 +17,15 @@ def static_homogenous(node_data, edge_data):
     with col2:
         st.subheader("Visualization")
         
-        graphs = []
-        for f in edge_data["feature"].unique():
-            f = edge_data[edge_data["feature"] == f]
-            g = convert_to_graph(f)
-            graphs.append(g)
+        # graphs = []
+        # for f in edge_data["feature"].unique():
+        #     f = edge_data[edge_data["feature"] == f]
+        #     g = convert_to_graph(f)
+        #     graphs.append(g)
             
-        visualize_multiple_graphs(graphs=graphs, labels=edge_data['feature'].unique())
+        # visualize_multiple_graphs(graphs=graphs, labels=edge_data['feature'].unique())
+        
+        visualize_dynamic_graph(edge_data=edge_data)
         
     st.header("Results")
     
@@ -50,6 +50,7 @@ def process_flow(edge_data, key_prefix):
                          "Cluster Rank Centrality", "Maximum Neighborhood Component", "Semi Local Centrality", "Load Centrality"]
     selected_algorithm = st.selectbox("Algorithm", options=algorithm_options, key=f'{key_prefix}_algorithm')
     input_features = st.text_input("Comma separated features (Empty for all features)", key=f'{key_prefix}_features')
+    timestamp = st.slider("Timestamp", min_value=edge_data['timestamp'].unique()[0], max_value=edge_data['timestamp'].unique()[-1], key=f'{key_prefix}_range')
     
     if input_features != "" :
         features1= [int(f.strip()) for f in input_features.split(',')]
@@ -102,9 +103,10 @@ def process_flow(edge_data, key_prefix):
         st.write("Semi Local Centrality: Degree of a node, degree of its neighbours (degree- no.of edges), Connection: What is the influence of the node on others?, Supply Chain: Disruption – how it affects the neighbours and the n/w")
     elif selected_algorithm == algorithm_options[14]:
         scores = load_centrality(filtered)
+    
         
     for f in features:
-        d = edge_data[edge_data["feature"] == f]
+        d = edge_data[(edge_data["feature"] == f) & (edge_data['timestamp'] == timestamp)]
         g = convert_to_graph(d)
         
         graphs.append(g)

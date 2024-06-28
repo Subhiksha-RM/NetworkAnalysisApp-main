@@ -1,0 +1,405 @@
+<style>
+svg circle.node {
+  fill: #3b5998;
+  stroke: #1b3978;
+  stroke-width: 2.5px;
+  r: 15px;
+  opacity: 1;
+}
+
+.link {
+  stroke: #969595;
+  stroke-opacity: .75;
+  stroke-width: 2.5px;
+}
+
+.arrow {
+  fill: #969595;
+}
+
+
+.label-text {
+    fill: #969595;
+    font-size: 16px;
+    font-family: sans-serif;
+}
+
+</style>
+
+<div id = "xa1310ab7735941618eccfc484edc8061"> </div>
+<script charset="utf-8" src="https://d3js.org/d3.v5.min.js"></script>
+<script charset="utf-8">
+// Load via requireJS if available (jupyter notebook environment)
+try {
+    // Problem: require.config will raise an exception when called for the second time 
+    require.config({
+        paths: {
+            d3: "https://d3js.org/d3.v5.min.js".replace(".js", "")
+        }
+    });
+    console.log("OKAY: requireJS was detected.");
+}
+catch(err){
+    // a reference error indicates that requireJS does not exist. 
+    // other errors may occur due to multiple calls to config
+    if (err instanceof ReferenceError){
+        console.log("WARNING: NO requireJS was detected!");
+
+        // Helper function that waits for d3js to be loaded
+        require = function require(symbols, callback) {
+            var ms = 10;
+            window.setTimeout(function(t) {
+                if (window[symbols[0]])
+                    callback(window[symbols[0]]);
+                else 
+                    window.setTimeout(arguments.callee, ms);
+            }, ms);
+        }
+    }
+};
+require(['d3'], function(d3){ //START
+const data = {"edges": [{"uid": "3.0-0.0-0.0", "source": "3.0", "target": "0.0", "start": 0, "end": 1, "weight": 1}, {"uid": "3.0-1.0-0.0", "source": "3.0", "target": "1.0", "start": 0, "end": 1, "weight": 1}, {"uid": "3.0-0.0-1.0", "source": "3.0", "target": "0.0", "start": 1, "end": 2, "weight": 1}, {"uid": "3.0-1.0-1.0", "source": "3.0", "target": "1.0", "start": 1, "end": 2, "weight": 1}, {"uid": "4.0-0.0-1.0", "source": "4.0", "target": "0.0", "start": 1, "end": 2, "weight": 1}, {"uid": "2.0-0.0-2.0", "source": "2.0", "target": "0.0", "start": 2, "end": 3, "weight": 1}, {"uid": "3.0-0.0-2.0", "source": "3.0", "target": "0.0", "start": 2, "end": 3, "weight": 1}, {"uid": "3.0-1.0-2.0", "source": "3.0", "target": "1.0", "start": 2, "end": 3, "weight": 1}, {"uid": "3.0-1.0-3.0", "source": "3.0", "target": "1.0", "start": 3, "end": 4, "weight": 1}, {"uid": "4.0-1.0-3.0", "source": "4.0", "target": "1.0", "start": 3, "end": 4, "weight": 1}, {"uid": "3.0-1.0-4.0", "source": "3.0", "target": "1.0", "start": 4, "end": 5, "weight": 1}, {"uid": "2.0-1.0-5.0", "source": "2.0", "target": "1.0", "start": 5, "end": 6, "weight": 1}, {"uid": "3.0-1.0-5.0", "source": "3.0", "target": "1.0", "start": 5, "end": 6, "weight": 1}, {"uid": "1.0-3.0-6.0", "source": "1.0", "target": "3.0", "start": 6, "end": 7, "weight": 1}, {"uid": "3.0-1.0-6.0", "source": "3.0", "target": "1.0", "start": 6, "end": 7, "weight": 1}, {"uid": "3.0-4.0-6.0", "source": "3.0", "target": "4.0", "start": 6, "end": 7, "weight": 1}, {"uid": "1.0-3.0-7.0", "source": "1.0", "target": "3.0", "start": 7, "end": 8, "weight": 1}, {"uid": "3.0-2.0-7.0", "source": "3.0", "target": "2.0", "start": 7, "end": 8, "weight": 1}, {"uid": "3.0-4.0-7.0", "source": "3.0", "target": "4.0", "start": 7, "end": 8, "weight": 1}, {"uid": "1.0-3.0-8.0", "source": "1.0", "target": "3.0", "start": 8, "end": 9, "weight": 1}, {"uid": "3.0-2.0-8.0", "source": "3.0", "target": "2.0", "start": 8, "end": 9, "weight": 1}, {"uid": "3.0-4.0-8.0", "source": "3.0", "target": "4.0", "start": 8, "end": 9, "weight": 1}, {"uid": "1.0-3.0-9.0", "source": "1.0", "target": "3.0", "start": 9, "end": 10, "weight": 1}, {"uid": "3.0-1.0-9.0", "source": "3.0", "target": "1.0", "start": 9, "end": 10, "weight": 1}, {"uid": "3.0-2.0-9.0", "source": "3.0", "target": "2.0", "start": 9, "end": 10, "weight": 1}, {"uid": "0.0-1.0-10.0", "source": "0.0", "target": "1.0", "start": 10, "end": 11, "weight": 1}, {"uid": "3.0-1.0-10.0", "source": "3.0", "target": "1.0", "start": 10, "end": 11, "weight": 1}, {"uid": "3.0-2.0-10.0", "source": "3.0", "target": "2.0", "start": 10, "end": 11, "weight": 1}, {"uid": "3.0-1.0-11.0", "source": "3.0", "target": "1.0", "start": 11, "end": 12, "weight": 1}, {"uid": "3.0-2.0-11.0", "source": "3.0", "target": "2.0", "start": 11, "end": 12, "weight": 1}, {"uid": "0.0-4.0-12.0", "source": "0.0", "target": "4.0", "start": 12, "end": 13, "weight": 1}, {"uid": "2.0-0.0-12.0", "source": "2.0", "target": "0.0", "start": 12, "end": 13, "weight": 1}, {"uid": "2.0-3.0-12.0", "source": "2.0", "target": "3.0", "start": 12, "end": 13, "weight": 1}, {"uid": "3.0-2.0-12.0", "source": "3.0", "target": "2.0", "start": 12, "end": 13, "weight": 1}, {"uid": "0.0-4.0-13.0", "source": "0.0", "target": "4.0", "start": 13, "end": 14, "weight": 1}, {"uid": "1.0-0.0-13.0", "source": "1.0", "target": "0.0", "start": 13, "end": 14, "weight": 1}, {"uid": "2.0-0.0-13.0", "source": "2.0", "target": "0.0", "start": 13, "end": 14, "weight": 1}, {"uid": "4.0-2.0-13.0", "source": "4.0", "target": "2.0", "start": 13, "end": 14, "weight": 1}, {"uid": "0.0-4.0-14.0", "source": "0.0", "target": "4.0", "start": 14, "end": 15, "weight": 1}, {"uid": "1.0-0.0-14.0", "source": "1.0", "target": "0.0", "start": 14, "end": 15, "weight": 1}, {"uid": "2.0-0.0-14.0", "source": "2.0", "target": "0.0", "start": 14, "end": 15, "weight": 1}, {"uid": "1.0-0.0-15.0", "source": "1.0", "target": "0.0", "start": 15, "end": 16, "weight": 1}, {"uid": "2.0-0.0-15.0", "source": "2.0", "target": "0.0", "start": 15, "end": 16, "weight": 1}, {"uid": "1.0-0.0-16.0", "source": "1.0", "target": "0.0", "start": 16, "end": 17, "weight": 1}, {"uid": "2.0-0.0-16.0", "source": "2.0", "target": "0.0", "start": 16, "end": 17, "weight": 1}, {"uid": "3.0-4.0-16.0", "source": "3.0", "target": "4.0", "start": 16, "end": 17, "weight": 1}, {"uid": "4.0-0.0-16.0", "source": "4.0", "target": "0.0", "start": 16, "end": 17, "weight": 1}, {"uid": "1.0-0.0-17.0", "source": "1.0", "target": "0.0", "start": 17, "end": 18, "weight": 1}, {"uid": "2.0-0.0-17.0", "source": "2.0", "target": "0.0", "start": 17, "end": 18, "weight": 1}, {"uid": "3.0-4.0-17.0", "source": "3.0", "target": "4.0", "start": 17, "end": 18, "weight": 1}, {"uid": "4.0-0.0-17.0", "source": "4.0", "target": "0.0", "start": 17, "end": 18, "weight": 1}, {"uid": "1.0-0.0-18.0", "source": "1.0", "target": "0.0", "start": 18, "end": 19, "weight": 1}, {"uid": "2.0-0.0-18.0", "source": "2.0", "target": "0.0", "start": 18, "end": 19, "weight": 1}, {"uid": "4.0-0.0-18.0", "source": "4.0", "target": "0.0", "start": 18, "end": 19, "weight": 1}, {"uid": "4.0-2.0-18.0", "source": "4.0", "target": "2.0", "start": 18, "end": 19, "weight": 1}, {"uid": "1.0-0.0-19.0", "source": "1.0", "target": "0.0", "start": 19, "end": 20, "weight": 1}, {"uid": "1.0-4.0-19.0", "source": "1.0", "target": "4.0", "start": 19, "end": 20, "weight": 1}, {"uid": "3.0-4.0-19.0", "source": "3.0", "target": "4.0", "start": 19, "end": 20, "weight": 1}, {"uid": "4.0-0.0-19.0", "source": "4.0", "target": "0.0", "start": 19, "end": 20, "weight": 1}, {"uid": "1.0-0.0-20.0", "source": "1.0", "target": "0.0", "start": 20, "end": 21, "weight": 1}, {"uid": "1.0-3.0-20.0", "source": "1.0", "target": "3.0", "start": 20, "end": 21, "weight": 1}, {"uid": "3.0-0.0-20.0", "source": "3.0", "target": "0.0", "start": 20, "end": 21, "weight": 1}, {"uid": "3.0-4.0-20.0", "source": "3.0", "target": "4.0", "start": 20, "end": 21, "weight": 1}, {"uid": "4.0-0.0-20.0", "source": "4.0", "target": "0.0", "start": 20, "end": 21, "weight": 1}, {"uid": "1.0-0.0-21.0", "source": "1.0", "target": "0.0", "start": 21, "end": 22, "weight": 1}, {"uid": "1.0-3.0-21.0", "source": "1.0", "target": "3.0", "start": 21, "end": 22, "weight": 1}, {"uid": "3.0-4.0-21.0", "source": "3.0", "target": "4.0", "start": 21, "end": 22, "weight": 1}, {"uid": "3.0-4.0-22.0", "source": "3.0", "target": "4.0", "start": 22, "end": 23, "weight": 1}, {"uid": "4.0-2.0-22.0", "source": "4.0", "target": "2.0", "start": 22, "end": 23, "weight": 1}, {"uid": "3.0-4.0-23.0", "source": "3.0", "target": "4.0", "start": 23, "end": 24, "weight": 1}, {"uid": "4.0-2.0-23.0", "source": "4.0", "target": "2.0", "start": 23, "end": 24, "weight": 1}, {"uid": "1.0-2.0-24.0", "source": "1.0", "target": "2.0", "start": 24, "end": 25, "weight": 1}, {"uid": "3.0-0.0-24.0", "source": "3.0", "target": "0.0", "start": 24, "end": 25, "weight": 1}, {"uid": "3.0-4.0-24.0", "source": "3.0", "target": "4.0", "start": 24, "end": 25, "weight": 1}, {"uid": "4.0-2.0-24.0", "source": "4.0", "target": "2.0", "start": 24, "end": 25, "weight": 1}, {"uid": "1.0-2.0-25.0", "source": "1.0", "target": "2.0", "start": 25, "end": 26, "weight": 1}, {"uid": "3.0-0.0-25.0", "source": "3.0", "target": "0.0", "start": 25, "end": 26, "weight": 1}, {"uid": "3.0-4.0-25.0", "source": "3.0", "target": "4.0", "start": 25, "end": 26, "weight": 1}, {"uid": "4.0-2.0-25.0", "source": "4.0", "target": "2.0", "start": 25, "end": 26, "weight": 1}, {"uid": "1.0-2.0-26.0", "source": "1.0", "target": "2.0", "start": 26, "end": 27, "weight": 1}, {"uid": "1.0-3.0-26.0", "source": "1.0", "target": "3.0", "start": 26, "end": 27, "weight": 1}, {"uid": "2.0-1.0-26.0", "source": "2.0", "target": "1.0", "start": 26, "end": 27, "weight": 1}, {"uid": "3.0-4.0-26.0", "source": "3.0", "target": "4.0", "start": 26, "end": 27, "weight": 1}, {"uid": "4.0-2.0-26.0", "source": "4.0", "target": "2.0", "start": 26, "end": 27, "weight": 1}, {"uid": "4.0-3.0-26.0", "source": "4.0", "target": "3.0", "start": 26, "end": 27, "weight": 1}, {"uid": "1.0-2.0-27.0", "source": "1.0", "target": "2.0", "start": 27, "end": 28, "weight": 1}, {"uid": "1.0-3.0-27.0", "source": "1.0", "target": "3.0", "start": 27, "end": 28, "weight": 1}, {"uid": "2.0-1.0-27.0", "source": "2.0", "target": "1.0", "start": 27, "end": 28, "weight": 1}, {"uid": "3.0-4.0-27.0", "source": "3.0", "target": "4.0", "start": 27, "end": 28, "weight": 1}, {"uid": "4.0-3.0-27.0", "source": "4.0", "target": "3.0", "start": 27, "end": 28, "weight": 1}, {"uid": "1.0-2.0-28.0", "source": "1.0", "target": "2.0", "start": 28, "end": 29, "weight": 1}, {"uid": "1.0-3.0-28.0", "source": "1.0", "target": "3.0", "start": 28, "end": 29, "weight": 1}, {"uid": "2.0-1.0-28.0", "source": "2.0", "target": "1.0", "start": 28, "end": 29, "weight": 1}, {"uid": "2.0-4.0-28.0", "source": "2.0", "target": "4.0", "start": 28, "end": 29, "weight": 1}, {"uid": "3.0-2.0-28.0", "source": "3.0", "target": "2.0", "start": 28, "end": 29, "weight": 1}, {"uid": "3.0-4.0-28.0", "source": "3.0", "target": "4.0", "start": 28, "end": 29, "weight": 1}, {"uid": "4.0-1.0-28.0", "source": "4.0", "target": "1.0", "start": 28, "end": 29, "weight": 1}, {"uid": "4.0-3.0-28.0", "source": "4.0", "target": "3.0", "start": 28, "end": 29, "weight": 1}, {"uid": "1.0-2.0-29.0", "source": "1.0", "target": "2.0", "start": 29, "end": 30, "weight": 1}, {"uid": "1.0-3.0-29.0", "source": "1.0", "target": "3.0", "start": 29, "end": 30, "weight": 1}, {"uid": "2.0-1.0-29.0", "source": "2.0", "target": "1.0", "start": 29, "end": 30, "weight": 1}, {"uid": "2.0-4.0-29.0", "source": "2.0", "target": "4.0", "start": 29, "end": 30, "weight": 1}, {"uid": "3.0-2.0-29.0", "source": "3.0", "target": "2.0", "start": 29, "end": 30, "weight": 1}, {"uid": "3.0-4.0-29.0", "source": "3.0", "target": "4.0", "start": 29, "end": 30, "weight": 1}, {"uid": "4.0-1.0-29.0", "source": "4.0", "target": "1.0", "start": 29, "end": 30, "weight": 1}, {"uid": "1.0-2.0-30.0", "source": "1.0", "target": "2.0", "start": 30, "end": 31, "weight": 1}, {"uid": "2.0-1.0-30.0", "source": "2.0", "target": "1.0", "start": 30, "end": 31, "weight": 1}, {"uid": "2.0-4.0-30.0", "source": "2.0", "target": "4.0", "start": 30, "end": 31, "weight": 1}, {"uid": "3.0-2.0-30.0", "source": "3.0", "target": "2.0", "start": 30, "end": 31, "weight": 1}, {"uid": "3.0-4.0-30.0", "source": "3.0", "target": "4.0", "start": 30, "end": 31, "weight": 1}, {"uid": "4.0-1.0-30.0", "source": "4.0", "target": "1.0", "start": 30, "end": 31, "weight": 1}, {"uid": "0.0-2.0-31.0", "source": "0.0", "target": "2.0", "start": 31, "end": 32, "weight": 1}, {"uid": "2.0-1.0-31.0", "source": "2.0", "target": "1.0", "start": 31, "end": 32, "weight": 1}, {"uid": "2.0-4.0-31.0", "source": "2.0", "target": "4.0", "start": 31, "end": 32, "weight": 1}, {"uid": "3.0-4.0-31.0", "source": "3.0", "target": "4.0", "start": 31, "end": 32, "weight": 1}, {"uid": "0.0-2.0-32.0", "source": "0.0", "target": "2.0", "start": 32, "end": 33, "weight": 1}, {"uid": "2.0-1.0-32.0", "source": "2.0", "target": "1.0", "start": 32, "end": 33, "weight": 1}, {"uid": "2.0-4.0-32.0", "source": "2.0", "target": "4.0", "start": 32, "end": 33, "weight": 1}, {"uid": "3.0-4.0-32.0", "source": "3.0", "target": "4.0", "start": 32, "end": 33, "weight": 1}, {"uid": "0.0-2.0-33.0", "source": "0.0", "target": "2.0", "start": 33, "end": 34, "weight": 1}, {"uid": "2.0-4.0-33.0", "source": "2.0", "target": "4.0", "start": 33, "end": 34, "weight": 1}, {"uid": "3.0-4.0-33.0", "source": "3.0", "target": "4.0", "start": 33, "end": 34, "weight": 1}, {"uid": "2.0-4.0-34.0", "source": "2.0", "target": "4.0", "start": 34, "end": 35, "weight": 1}, {"uid": "0.0-4.0-35.0", "source": "0.0", "target": "4.0", "start": 35, "end": 36, "weight": 1}, {"uid": "0.0-4.0-36.0", "source": "0.0", "target": "4.0", "start": 36, "end": 37, "weight": 1}, {"uid": "1.0-0.0-36.0", "source": "1.0", "target": "0.0", "start": 36, "end": 37, "weight": 1}, {"uid": "4.0-0.0-36.0", "source": "4.0", "target": "0.0", "start": 36, "end": 37, "weight": 1}, {"uid": "0.0-4.0-37.0", "source": "0.0", "target": "4.0", "start": 37, "end": 38, "weight": 1}, {"uid": "1.0-0.0-37.0", "source": "1.0", "target": "0.0", "start": 37, "end": 38, "weight": 1}, {"uid": "4.0-0.0-37.0", "source": "4.0", "target": "0.0", "start": 37, "end": 38, "weight": 1}, {"uid": "1.0-0.0-38.0", "source": "1.0", "target": "0.0", "start": 38, "end": 39, "weight": 1}, {"uid": "3.0-0.0-38.0", "source": "3.0", "target": "0.0", "start": 38, "end": 39, "weight": 1}, {"uid": "4.0-0.0-38.0", "source": "4.0", "target": "0.0", "start": 38, "end": 39, "weight": 1}, {"uid": "4.0-1.0-38.0", "source": "4.0", "target": "1.0", "start": 38, "end": 39, "weight": 1}, {"uid": "0.0-4.0-39.0", "source": "0.0", "target": "4.0", "start": 39, "end": 40, "weight": 1}, {"uid": "1.0-0.0-39.0", "source": "1.0", "target": "0.0", "start": 39, "end": 40, "weight": 1}, {"uid": "3.0-0.0-39.0", "source": "3.0", "target": "0.0", "start": 39, "end": 40, "weight": 1}, {"uid": "4.0-0.0-39.0", "source": "4.0", "target": "0.0", "start": 39, "end": 40, "weight": 1}, {"uid": "4.0-1.0-39.0", "source": "4.0", "target": "1.0", "start": 39, "end": 40, "weight": 1}, {"uid": "0.0-4.0-40.0", "source": "0.0", "target": "4.0", "start": 40, "end": 41, "weight": 1}, {"uid": "2.0-0.0-40.0", "source": "2.0", "target": "0.0", "start": 40, "end": 41, "weight": 1}, {"uid": "3.0-0.0-40.0", "source": "3.0", "target": "0.0", "start": 40, "end": 41, "weight": 1}, {"uid": "4.0-0.0-40.0", "source": "4.0", "target": "0.0", "start": 40, "end": 41, "weight": 1}, {"uid": "4.0-1.0-40.0", "source": "4.0", "target": "1.0", "start": 40, "end": 41, "weight": 1}, {"uid": "0.0-4.0-41.0", "source": "0.0", "target": "4.0", "start": 41, "end": 42, "weight": 1}, {"uid": "1.0-4.0-41.0", "source": "1.0", "target": "4.0", "start": 41, "end": 42, "weight": 1}, {"uid": "2.0-0.0-41.0", "source": "2.0", "target": "0.0", "start": 41, "end": 42, "weight": 1}, {"uid": "3.0-0.0-41.0", "source": "3.0", "target": "0.0", "start": 41, "end": 42, "weight": 1}, {"uid": "4.0-1.0-41.0", "source": "4.0", "target": "1.0", "start": 41, "end": 42, "weight": 1}, {"uid": "0.0-4.0-42.0", "source": "0.0", "target": "4.0", "start": 42, "end": 43, "weight": 1}, {"uid": "2.0-0.0-42.0", "source": "2.0", "target": "0.0", "start": 42, "end": 43, "weight": 1}, {"uid": "3.0-0.0-42.0", "source": "3.0", "target": "0.0", "start": 42, "end": 43, "weight": 1}, {"uid": "4.0-1.0-42.0", "source": "4.0", "target": "1.0", "start": 42, "end": 43, "weight": 1}, {"uid": "0.0-4.0-43.0", "source": "0.0", "target": "4.0", "start": 43, "end": 44, "weight": 1}, {"uid": "2.0-0.0-43.0", "source": "2.0", "target": "0.0", "start": 43, "end": 44, "weight": 1}, {"uid": "4.0-1.0-43.0", "source": "4.0", "target": "1.0", "start": 43, "end": 44, "weight": 1}, {"uid": "0.0-4.0-44.0", "source": "0.0", "target": "4.0", "start": 44, "end": 45, "weight": 1}, {"uid": "2.0-0.0-44.0", "source": "2.0", "target": "0.0", "start": 44, "end": 45, "weight": 1}, {"uid": "4.0-1.0-44.0", "source": "4.0", "target": "1.0", "start": 44, "end": 45, "weight": 1}, {"uid": "0.0-4.0-45.0", "source": "0.0", "target": "4.0", "start": 45, "end": 46, "weight": 1}, {"uid": "1.0-4.0-45.0", "source": "1.0", "target": "4.0", "start": 45, "end": 46, "weight": 1}, {"uid": "2.0-0.0-45.0", "source": "2.0", "target": "0.0", "start": 45, "end": 46, "weight": 1}, {"uid": "4.0-1.0-45.0", "source": "4.0", "target": "1.0", "start": 45, "end": 46, "weight": 1}, {"uid": "0.0-2.0-46.0", "source": "0.0", "target": "2.0", "start": 46, "end": 47, "weight": 1}, {"uid": "0.0-4.0-46.0", "source": "0.0", "target": "4.0", "start": 46, "end": 47, "weight": 1}, {"uid": "2.0-0.0-46.0", "source": "2.0", "target": "0.0", "start": 46, "end": 47, "weight": 1}, {"uid": "4.0-1.0-46.0", "source": "4.0", "target": "1.0", "start": 46, "end": 47, "weight": 1}, {"uid": "0.0-2.0-47.0", "source": "0.0", "target": "2.0", "start": 47, "end": 48, "weight": 1}, {"uid": "0.0-4.0-47.0", "source": "0.0", "target": "4.0", "start": 47, "end": 48, "weight": 1}, {"uid": "4.0-1.0-47.0", "source": "4.0", "target": "1.0", "start": 47, "end": 48, "weight": 1}, {"uid": "0.0-2.0-48.0", "source": "0.0", "target": "2.0", "start": 48, "end": 49, "weight": 1}, {"uid": "0.0-2.0-49.0", "source": "0.0", "target": "2.0", "start": 49, "end": 50, "weight": 1}, {"uid": "3.0-2.0-49.0", "source": "3.0", "target": "2.0", "start": 49, "end": 50, "weight": 1}, {"uid": "4.0-2.0-49.0", "source": "4.0", "target": "2.0", "start": 49, "end": 50, "weight": 1}, {"uid": "0.0-2.0-50.0", "source": "0.0", "target": "2.0", "start": 50, "end": 51, "weight": 1}, {"uid": "2.0-3.0-50.0", "source": "2.0", "target": "3.0", "start": 50, "end": 51, "weight": 1}, {"uid": "3.0-2.0-50.0", "source": "3.0", "target": "2.0", "start": 50, "end": 51, "weight": 1}, {"uid": "2.0-3.0-51.0", "source": "2.0", "target": "3.0", "start": 51, "end": 52, "weight": 1}, {"uid": "3.0-2.0-51.0", "source": "3.0", "target": "2.0", "start": 51, "end": 52, "weight": 1}, {"uid": "3.0-4.0-51.0", "source": "3.0", "target": "4.0", "start": 51, "end": 52, "weight": 1}, {"uid": "2.0-3.0-52.0", "source": "2.0", "target": "3.0", "start": 52, "end": 53, "weight": 1}, {"uid": "2.0-4.0-52.0", "source": "2.0", "target": "4.0", "start": 52, "end": 53, "weight": 1}, {"uid": "3.0-2.0-52.0", "source": "3.0", "target": "2.0", "start": 52, "end": 53, "weight": 1}, {"uid": "3.0-4.0-52.0", "source": "3.0", "target": "4.0", "start": 52, "end": 53, "weight": 1}, {"uid": "2.0-3.0-53.0", "source": "2.0", "target": "3.0", "start": 53, "end": 54, "weight": 1}, {"uid": "2.0-4.0-53.0", "source": "2.0", "target": "4.0", "start": 53, "end": 54, "weight": 1}, {"uid": "3.0-2.0-53.0", "source": "3.0", "target": "2.0", "start": 53, "end": 54, "weight": 1}, {"uid": "3.0-4.0-53.0", "source": "3.0", "target": "4.0", "start": 53, "end": 54, "weight": 1}, {"uid": "2.0-3.0-54.0", "source": "2.0", "target": "3.0", "start": 54, "end": 55, "weight": 1}, {"uid": "2.0-4.0-54.0", "source": "2.0", "target": "4.0", "start": 54, "end": 55, "weight": 1}, {"uid": "3.0-2.0-54.0", "source": "3.0", "target": "2.0", "start": 54, "end": 55, "weight": 1}, {"uid": "3.0-4.0-54.0", "source": "3.0", "target": "4.0", "start": 54, "end": 55, "weight": 1}, {"uid": "2.0-3.0-55.0", "source": "2.0", "target": "3.0", "start": 55, "end": 56, "weight": 1}, {"uid": "2.0-4.0-55.0", "source": "2.0", "target": "4.0", "start": 55, "end": 56, "weight": 1}, {"uid": "3.0-2.0-55.0", "source": "3.0", "target": "2.0", "start": 55, "end": 56, "weight": 1}, {"uid": "3.0-4.0-55.0", "source": "3.0", "target": "4.0", "start": 55, "end": 56, "weight": 1}, {"uid": "2.0-3.0-56.0", "source": "2.0", "target": "3.0", "start": 56, "end": 57, "weight": 1}, {"uid": "3.0-0.0-56.0", "source": "3.0", "target": "0.0", "start": 56, "end": 57, "weight": 1}, {"uid": "3.0-1.0-56.0", "source": "3.0", "target": "1.0", "start": 56, "end": 57, "weight": 1}, {"uid": "3.0-2.0-56.0", "source": "3.0", "target": "2.0", "start": 56, "end": 57, "weight": 1}, {"uid": "1.0-3.0-57.0", "source": "1.0", "target": "3.0", "start": 57, "end": 58, "weight": 1}, {"uid": "2.0-3.0-57.0", "source": "2.0", "target": "3.0", "start": 57, "end": 58, "weight": 1}, {"uid": "3.0-0.0-57.0", "source": "3.0", "target": "0.0", "start": 57, "end": 58, "weight": 1}, {"uid": "3.0-1.0-57.0", "source": "3.0", "target": "1.0", "start": 57, "end": 58, "weight": 1}, {"uid": "3.0-2.0-57.0", "source": "3.0", "target": "2.0", "start": 57, "end": 58, "weight": 1}, {"uid": "1.0-3.0-58.0", "source": "1.0", "target": "3.0", "start": 58, "end": 59, "weight": 1}, {"uid": "1.0-4.0-58.0", "source": "1.0", "target": "4.0", "start": 58, "end": 59, "weight": 1}, {"uid": "2.0-3.0-58.0", "source": "2.0", "target": "3.0", "start": 58, "end": 59, "weight": 1}, {"uid": "3.0-1.0-58.0", "source": "3.0", "target": "1.0", "start": 58, "end": 59, "weight": 1}, {"uid": "1.0-3.0-59.0", "source": "1.0", "target": "3.0", "start": 59, "end": 60, "weight": 1}, {"uid": "1.0-4.0-59.0", "source": "1.0", "target": "4.0", "start": 59, "end": 60, "weight": 1}, {"uid": "2.0-3.0-59.0", "source": "2.0", "target": "3.0", "start": 59, "end": 60, "weight": 1}, {"uid": "3.0-1.0-59.0", "source": "3.0", "target": "1.0", "start": 59, "end": 60, "weight": 1}, {"uid": "1.0-0.0-60.0", "source": "1.0", "target": "0.0", "start": 60, "end": 61, "weight": 1}, {"uid": "1.0-3.0-60.0", "source": "1.0", "target": "3.0", "start": 60, "end": 61, "weight": 1}, {"uid": "1.0-4.0-60.0", "source": "1.0", "target": "4.0", "start": 60, "end": 61, "weight": 1}, {"uid": "2.0-3.0-60.0", "source": "2.0", "target": "3.0", "start": 60, "end": 61, "weight": 1}, {"uid": "3.0-1.0-60.0", "source": "3.0", "target": "1.0", "start": 60, "end": 61, "weight": 1}, {"uid": "1.0-0.0-61.0", "source": "1.0", "target": "0.0", "start": 61, "end": 62, "weight": 1}, {"uid": "1.0-4.0-61.0", "source": "1.0", "target": "4.0", "start": 61, "end": 62, "weight": 1}, {"uid": "2.0-3.0-61.0", "source": "2.0", "target": "3.0", "start": 61, "end": 62, "weight": 1}, {"uid": "3.0-1.0-61.0", "source": "3.0", "target": "1.0", "start": 61, "end": 62, "weight": 1}, {"uid": "1.0-0.0-62.0", "source": "1.0", "target": "0.0", "start": 62, "end": 63, "weight": 1}, {"uid": "1.0-2.0-62.0", "source": "1.0", "target": "2.0", "start": 62, "end": 63, "weight": 1}, {"uid": "1.0-4.0-62.0", "source": "1.0", "target": "4.0", "start": 62, "end": 63, "weight": 1}, {"uid": "2.0-3.0-62.0", "source": "2.0", "target": "3.0", "start": 62, "end": 63, "weight": 1}, {"uid": "3.0-1.0-62.0", "source": "3.0", "target": "1.0", "start": 62, "end": 63, "weight": 1}, {"uid": "0.0-1.0-63.0", "source": "0.0", "target": "1.0", "start": 63, "end": 64, "weight": 1}, {"uid": "1.0-0.0-63.0", "source": "1.0", "target": "0.0", "start": 63, "end": 64, "weight": 1}, {"uid": "1.0-2.0-63.0", "source": "1.0", "target": "2.0", "start": 63, "end": 64, "weight": 1}, {"uid": "1.0-4.0-63.0", "source": "1.0", "target": "4.0", "start": 63, "end": 64, "weight": 1}, {"uid": "3.0-1.0-63.0", "source": "3.0", "target": "1.0", "start": 63, "end": 64, "weight": 1}, {"uid": "0.0-1.0-64.0", "source": "0.0", "target": "1.0", "start": 64, "end": 65, "weight": 1}, {"uid": "0.0-4.0-64.0", "source": "0.0", "target": "4.0", "start": 64, "end": 65, "weight": 1}, {"uid": "1.0-0.0-64.0", "source": "1.0", "target": "0.0", "start": 64, "end": 65, "weight": 1}, {"uid": "1.0-2.0-64.0", "source": "1.0", "target": "2.0", "start": 64, "end": 65, "weight": 1}, {"uid": "3.0-4.0-64.0", "source": "3.0", "target": "4.0", "start": 64, "end": 65, "weight": 1}, {"uid": "0.0-1.0-65.0", "source": "0.0", "target": "1.0", "start": 65, "end": 66, "weight": 1}, {"uid": "0.0-4.0-65.0", "source": "0.0", "target": "4.0", "start": 65, "end": 66, "weight": 1}, {"uid": "1.0-0.0-65.0", "source": "1.0", "target": "0.0", "start": 65, "end": 66, "weight": 1}, {"uid": "3.0-4.0-65.0", "source": "3.0", "target": "4.0", "start": 65, "end": 66, "weight": 1}, {"uid": "0.0-1.0-66.0", "source": "0.0", "target": "1.0", "start": 66, "end": 67, "weight": 1}, {"uid": "0.0-4.0-66.0", "source": "0.0", "target": "4.0", "start": 66, "end": 67, "weight": 1}, {"uid": "3.0-1.0-66.0", "source": "3.0", "target": "1.0", "start": 66, "end": 67, "weight": 1}, {"uid": "3.0-4.0-66.0", "source": "3.0", "target": "4.0", "start": 66, "end": 67, "weight": 1}, {"uid": "0.0-1.0-67.0", "source": "0.0", "target": "1.0", "start": 67, "end": 68, "weight": 1}, {"uid": "0.0-4.0-67.0", "source": "0.0", "target": "4.0", "start": 67, "end": 68, "weight": 1}, {"uid": "3.0-1.0-67.0", "source": "3.0", "target": "1.0", "start": 67, "end": 68, "weight": 1}, {"uid": "3.0-4.0-67.0", "source": "3.0", "target": "4.0", "start": 67, "end": 68, "weight": 1}, {"uid": "0.0-1.0-68.0", "source": "0.0", "target": "1.0", "start": 68, "end": 69, "weight": 1}, {"uid": "0.0-3.0-68.0", "source": "0.0", "target": "3.0", "start": 68, "end": 69, "weight": 1}, {"uid": "0.0-4.0-68.0", "source": "0.0", "target": "4.0", "start": 68, "end": 69, "weight": 1}, {"uid": "4.0-3.0-68.0", "source": "4.0", "target": "3.0", "start": 68, "end": 69, "weight": 1}, {"uid": "0.0-1.0-69.0", "source": "0.0", "target": "1.0", "start": 69, "end": 70, "weight": 1}, {"uid": "0.0-3.0-69.0", "source": "0.0", "target": "3.0", "start": 69, "end": 70, "weight": 1}, {"uid": "0.0-4.0-69.0", "source": "0.0", "target": "4.0", "start": 69, "end": 70, "weight": 1}, {"uid": "4.0-3.0-69.0", "source": "4.0", "target": "3.0", "start": 69, "end": 70, "weight": 1}, {"uid": "0.0-1.0-70.0", "source": "0.0", "target": "1.0", "start": 70, "end": 71, "weight": 1}, {"uid": "0.0-2.0-70.0", "source": "0.0", "target": "2.0", "start": 70, "end": 71, "weight": 1}, {"uid": "0.0-3.0-70.0", "source": "0.0", "target": "3.0", "start": 70, "end": 71, "weight": 1}, {"uid": "0.0-4.0-70.0", "source": "0.0", "target": "4.0", "start": 70, "end": 71, "weight": 1}, {"uid": "3.0-1.0-70.0", "source": "3.0", "target": "1.0", "start": 70, "end": 71, "weight": 1}, {"uid": "4.0-3.0-70.0", "source": "4.0", "target": "3.0", "start": 70, "end": 71, "weight": 1}, {"uid": "0.0-1.0-71.0", "source": "0.0", "target": "1.0", "start": 71, "end": 72, "weight": 1}, {"uid": "0.0-2.0-71.0", "source": "0.0", "target": "2.0", "start": 71, "end": 72, "weight": 1}, {"uid": "0.0-3.0-71.0", "source": "0.0", "target": "3.0", "start": 71, "end": 72, "weight": 1}, {"uid": "0.0-4.0-71.0", "source": "0.0", "target": "4.0", "start": 71, "end": 72, "weight": 1}, {"uid": "4.0-3.0-71.0", "source": "4.0", "target": "3.0", "start": 71, "end": 72, "weight": 1}, {"uid": "0.0-1.0-72.0", "source": "0.0", "target": "1.0", "start": 72, "end": 73, "weight": 1}, {"uid": "0.0-2.0-72.0", "source": "0.0", "target": "2.0", "start": 72, "end": 73, "weight": 1}, {"uid": "0.0-3.0-72.0", "source": "0.0", "target": "3.0", "start": 72, "end": 73, "weight": 1}, {"uid": "0.0-4.0-72.0", "source": "0.0", "target": "4.0", "start": 72, "end": 73, "weight": 1}, {"uid": "4.0-3.0-72.0", "source": "4.0", "target": "3.0", "start": 72, "end": 73, "weight": 1}, {"uid": "0.0-1.0-73.0", "source": "0.0", "target": "1.0", "start": 73, "end": 74, "weight": 1}, {"uid": "0.0-2.0-73.0", "source": "0.0", "target": "2.0", "start": 73, "end": 74, "weight": 1}, {"uid": "0.0-3.0-73.0", "source": "0.0", "target": "3.0", "start": 73, "end": 74, "weight": 1}, {"uid": "0.0-4.0-73.0", "source": "0.0", "target": "4.0", "start": 73, "end": 74, "weight": 1}, {"uid": "2.0-3.0-73.0", "source": "2.0", "target": "3.0", "start": 73, "end": 74, "weight": 1}, {"uid": "4.0-3.0-73.0", "source": "4.0", "target": "3.0", "start": 73, "end": 74, "weight": 1}, {"uid": "0.0-1.0-74.0", "source": "0.0", "target": "1.0", "start": 74, "end": 75, "weight": 1}, {"uid": "0.0-2.0-74.0", "source": "0.0", "target": "2.0", "start": 74, "end": 75, "weight": 1}, {"uid": "0.0-3.0-74.0", "source": "0.0", "target": "3.0", "start": 74, "end": 75, "weight": 1}, {"uid": "0.0-4.0-74.0", "source": "0.0", "target": "4.0", "start": 74, "end": 75, "weight": 1}, {"uid": "0.0-1.0-75.0", "source": "0.0", "target": "1.0", "start": 75, "end": 76, "weight": 1}, {"uid": "0.0-2.0-75.0", "source": "0.0", "target": "2.0", "start": 75, "end": 76, "weight": 1}, {"uid": "0.0-3.0-75.0", "source": "0.0", "target": "3.0", "start": 75, "end": 76, "weight": 1}, {"uid": "0.0-4.0-75.0", "source": "0.0", "target": "4.0", "start": 75, "end": 76, "weight": 1}, {"uid": "0.0-1.0-76.0", "source": "0.0", "target": "1.0", "start": 76, "end": 77, "weight": 1}, {"uid": "0.0-2.0-76.0", "source": "0.0", "target": "2.0", "start": 76, "end": 77, "weight": 1}, {"uid": "0.0-3.0-76.0", "source": "0.0", "target": "3.0", "start": 76, "end": 77, "weight": 1}, {"uid": "0.0-4.0-76.0", "source": "0.0", "target": "4.0", "start": 76, "end": 77, "weight": 1}, {"uid": "4.0-1.0-76.0", "source": "4.0", "target": "1.0", "start": 76, "end": 77, "weight": 1}, {"uid": "4.0-2.0-76.0", "source": "4.0", "target": "2.0", "start": 76, "end": 77, "weight": 1}, {"uid": "0.0-1.0-77.0", "source": "0.0", "target": "1.0", "start": 77, "end": 78, "weight": 1}, {"uid": "0.0-2.0-77.0", "source": "0.0", "target": "2.0", "start": 77, "end": 78, "weight": 1}, {"uid": "0.0-3.0-77.0", "source": "0.0", "target": "3.0", "start": 77, "end": 78, "weight": 1}, {"uid": "0.0-4.0-77.0", "source": "0.0", "target": "4.0", "start": 77, "end": 78, "weight": 1}, {"uid": "3.0-0.0-77.0", "source": "3.0", "target": "0.0", "start": 77, "end": 78, "weight": 1}, {"uid": "4.0-2.0-77.0", "source": "4.0", "target": "2.0", "start": 77, "end": 78, "weight": 1}, {"uid": "0.0-1.0-78.0", "source": "0.0", "target": "1.0", "start": 78, "end": 79, "weight": 1}, {"uid": "0.0-2.0-78.0", "source": "0.0", "target": "2.0", "start": 78, "end": 79, "weight": 1}, {"uid": "0.0-3.0-78.0", "source": "0.0", "target": "3.0", "start": 78, "end": 79, "weight": 1}, {"uid": "0.0-4.0-78.0", "source": "0.0", "target": "4.0", "start": 78, "end": 79, "weight": 1}, {"uid": "3.0-0.0-78.0", "source": "3.0", "target": "0.0", "start": 78, "end": 79, "weight": 1}, {"uid": "4.0-0.0-78.0", "source": "4.0", "target": "0.0", "start": 78, "end": 79, "weight": 1}, {"uid": "4.0-2.0-78.0", "source": "4.0", "target": "2.0", "start": 78, "end": 79, "weight": 1}, {"uid": "0.0-4.0-79.0", "source": "0.0", "target": "4.0", "start": 79, "end": 80, "weight": 1}, {"uid": "3.0-0.0-79.0", "source": "3.0", "target": "0.0", "start": 79, "end": 80, "weight": 1}, {"uid": "4.0-0.0-79.0", "source": "4.0", "target": "0.0", "start": 79, "end": 80, "weight": 1}, {"uid": "4.0-2.0-79.0", "source": "4.0", "target": "2.0", "start": 79, "end": 80, "weight": 1}, {"uid": "0.0-4.0-80.0", "source": "0.0", "target": "4.0", "start": 80, "end": 81, "weight": 1}, {"uid": "4.0-0.0-80.0", "source": "4.0", "target": "0.0", "start": 80, "end": 81, "weight": 1}, {"uid": "4.0-2.0-80.0", "source": "4.0", "target": "2.0", "start": 80, "end": 81, "weight": 1}, {"uid": "0.0-3.0-81.0", "source": "0.0", "target": "3.0", "start": 81, "end": 82, "weight": 1}, {"uid": "0.0-4.0-81.0", "source": "0.0", "target": "4.0", "start": 81, "end": 82, "weight": 1}, {"uid": "4.0-2.0-81.0", "source": "4.0", "target": "2.0", "start": 81, "end": 82, "weight": 1}, {"uid": "0.0-3.0-82.0", "source": "0.0", "target": "3.0", "start": 82, "end": 83, "weight": 1}, {"uid": "0.0-4.0-82.0", "source": "0.0", "target": "4.0", "start": 82, "end": 83, "weight": 1}, {"uid": "3.0-4.0-82.0", "source": "3.0", "target": "4.0", "start": 82, "end": 83, "weight": 1}, {"uid": "0.0-3.0-83.0", "source": "0.0", "target": "3.0", "start": 83, "end": 84, "weight": 1}, {"uid": "0.0-4.0-83.0", "source": "0.0", "target": "4.0", "start": 83, "end": 84, "weight": 1}, {"uid": "3.0-4.0-83.0", "source": "3.0", "target": "4.0", "start": 83, "end": 84, "weight": 1}, {"uid": "4.0-0.0-83.0", "source": "4.0", "target": "0.0", "start": 83, "end": 84, "weight": 1}, {"uid": "0.0-3.0-84.0", "source": "0.0", "target": "3.0", "start": 84, "end": 85, "weight": 1}, {"uid": "0.0-4.0-84.0", "source": "0.0", "target": "4.0", "start": 84, "end": 85, "weight": 1}, {"uid": "2.0-0.0-84.0", "source": "2.0", "target": "0.0", "start": 84, "end": 85, "weight": 1}, {"uid": "3.0-4.0-84.0", "source": "3.0", "target": "4.0", "start": 84, "end": 85, "weight": 1}, {"uid": "4.0-0.0-84.0", "source": "4.0", "target": "0.0", "start": 84, "end": 85, "weight": 1}, {"uid": "0.0-4.0-85.0", "source": "0.0", "target": "4.0", "start": 85, "end": 86, "weight": 1}, {"uid": "2.0-0.0-85.0", "source": "2.0", "target": "0.0", "start": 85, "end": 86, "weight": 1}, {"uid": "3.0-4.0-85.0", "source": "3.0", "target": "4.0", "start": 85, "end": 86, "weight": 1}, {"uid": "4.0-0.0-85.0", "source": "4.0", "target": "0.0", "start": 85, "end": 86, "weight": 1}, {"uid": "0.0-2.0-86.0", "source": "0.0", "target": "2.0", "start": 86, "end": 87, "weight": 1}, {"uid": "1.0-3.0-86.0", "source": "1.0", "target": "3.0", "start": 86, "end": 87, "weight": 1}, {"uid": "2.0-0.0-86.0", "source": "2.0", "target": "0.0", "start": 86, "end": 87, "weight": 1}, {"uid": "2.0-1.0-86.0", "source": "2.0", "target": "1.0", "start": 86, "end": 87, "weight": 1}, {"uid": "3.0-4.0-86.0", "source": "3.0", "target": "4.0", "start": 86, "end": 87, "weight": 1}, {"uid": "4.0-0.0-86.0", "source": "4.0", "target": "0.0", "start": 86, "end": 87, "weight": 1}, {"uid": "1.0-3.0-87.0", "source": "1.0", "target": "3.0", "start": 87, "end": 88, "weight": 1}, {"uid": "2.0-0.0-87.0", "source": "2.0", "target": "0.0", "start": 87, "end": 88, "weight": 1}, {"uid": "2.0-1.0-87.0", "source": "2.0", "target": "1.0", "start": 87, "end": 88, "weight": 1}, {"uid": "3.0-4.0-87.0", "source": "3.0", "target": "4.0", "start": 87, "end": 88, "weight": 1}, {"uid": "1.0-3.0-88.0", "source": "1.0", "target": "3.0", "start": 88, "end": 89, "weight": 1}, {"uid": "2.0-0.0-88.0", "source": "2.0", "target": "0.0", "start": 88, "end": 89, "weight": 1}, {"uid": "2.0-1.0-88.0", "source": "2.0", "target": "1.0", "start": 88, "end": 89, "weight": 1}, {"uid": "3.0-4.0-88.0", "source": "3.0", "target": "4.0", "start": 88, "end": 89, "weight": 1}, {"uid": "1.0-3.0-89.0", "source": "1.0", "target": "3.0", "start": 89, "end": 90, "weight": 1}, {"uid": "2.0-0.0-89.0", "source": "2.0", "target": "0.0", "start": 89, "end": 90, "weight": 1}, {"uid": "2.0-1.0-89.0", "source": "2.0", "target": "1.0", "start": 89, "end": 90, "weight": 1}, {"uid": "1.0-4.0-90.0", "source": "1.0", "target": "4.0", "start": 90, "end": 91, "weight": 1}, {"uid": "2.0-0.0-90.0", "source": "2.0", "target": "0.0", "start": 90, "end": 91, "weight": 1}, {"uid": "1.0-4.0-91.0", "source": "1.0", "target": "4.0", "start": 91, "end": 92, "weight": 1}, {"uid": "2.0-0.0-91.0", "source": "2.0", "target": "0.0", "start": 91, "end": 92, "weight": 1}, {"uid": "2.0-4.0-91.0", "source": "2.0", "target": "4.0", "start": 91, "end": 92, "weight": 1}, {"uid": "4.0-3.0-91.0", "source": "4.0", "target": "3.0", "start": 91, "end": 92, "weight": 1}, {"uid": "1.0-4.0-92.0", "source": "1.0", "target": "4.0", "start": 92, "end": 93, "weight": 1}, {"uid": "2.0-0.0-92.0", "source": "2.0", "target": "0.0", "start": 92, "end": 93, "weight": 1}, {"uid": "2.0-4.0-92.0", "source": "2.0", "target": "4.0", "start": 92, "end": 93, "weight": 1}, {"uid": "4.0-1.0-92.0", "source": "4.0", "target": "1.0", "start": 92, "end": 93, "weight": 1}, {"uid": "4.0-3.0-92.0", "source": "4.0", "target": "3.0", "start": 92, "end": 93, "weight": 1}, {"uid": "0.0-1.0-93.0", "source": "0.0", "target": "1.0", "start": 93, "end": 94, "weight": 1}, {"uid": "0.0-3.0-93.0", "source": "0.0", "target": "3.0", "start": 93, "end": 94, "weight": 1}, {"uid": "1.0-4.0-93.0", "source": "1.0", "target": "4.0", "start": 93, "end": 94, "weight": 1}, {"uid": "2.0-0.0-93.0", "source": "2.0", "target": "0.0", "start": 93, "end": 94, "weight": 1}, {"uid": "4.0-1.0-93.0", "source": "4.0", "target": "1.0", "start": 93, "end": 94, "weight": 1}, {"uid": "0.0-1.0-94.0", "source": "0.0", "target": "1.0", "start": 94, "end": 95, "weight": 1}, {"uid": "0.0-2.0-94.0", "source": "0.0", "target": "2.0", "start": 94, "end": 95, "weight": 1}, {"uid": "0.0-3.0-94.0", "source": "0.0", "target": "3.0", "start": 94, "end": 95, "weight": 1}, {"uid": "1.0-4.0-94.0", "source": "1.0", "target": "4.0", "start": 94, "end": 95, "weight": 1}, {"uid": "2.0-0.0-94.0", "source": "2.0", "target": "0.0", "start": 94, "end": 95, "weight": 1}, {"uid": "4.0-1.0-94.0", "source": "4.0", "target": "1.0", "start": 94, "end": 95, "weight": 1}, {"uid": "0.0-3.0-95.0", "source": "0.0", "target": "3.0", "start": 95, "end": 96, "weight": 1}, {"uid": "1.0-4.0-95.0", "source": "1.0", "target": "4.0", "start": 95, "end": 96, "weight": 1}, {"uid": "2.0-0.0-95.0", "source": "2.0", "target": "0.0", "start": 95, "end": 96, "weight": 1}, {"uid": "4.0-0.0-95.0", "source": "4.0", "target": "0.0", "start": 95, "end": 96, "weight": 1}, {"uid": "0.0-3.0-96.0", "source": "0.0", "target": "3.0", "start": 96, "end": 97, "weight": 1}, {"uid": "1.0-4.0-96.0", "source": "1.0", "target": "4.0", "start": 96, "end": 97, "weight": 1}, {"uid": "2.0-1.0-96.0", "source": "2.0", "target": "1.0", "start": 96, "end": 97, "weight": 1}, {"uid": "4.0-0.0-96.0", "source": "4.0", "target": "0.0", "start": 96, "end": 97, "weight": 1}, {"uid": "0.0-3.0-97.0", "source": "0.0", "target": "3.0", "start": 97, "end": 98, "weight": 1}, {"uid": "0.0-4.0-97.0", "source": "0.0", "target": "4.0", "start": 97, "end": 98, "weight": 1}, {"uid": "1.0-4.0-97.0", "source": "1.0", "target": "4.0", "start": 97, "end": 98, "weight": 1}, {"uid": "4.0-0.0-97.0", "source": "4.0", "target": "0.0", "start": 97, "end": 98, "weight": 1}, {"uid": "0.0-3.0-98.0", "source": "0.0", "target": "3.0", "start": 98, "end": 99, "weight": 1}, {"uid": "1.0-4.0-98.0", "source": "1.0", "target": "4.0", "start": 98, "end": 99, "weight": 1}, {"uid": "3.0-0.0-98.0", "source": "3.0", "target": "0.0", "start": 98, "end": 99, "weight": 1}, {"uid": "0.0-3.0-99.0", "source": "0.0", "target": "3.0", "start": 99, "end": 100, "weight": 1}, {"uid": "1.0-4.0-99.0", "source": "1.0", "target": "4.0", "start": 99, "end": 100, "weight": 1}, {"uid": "3.0-0.0-99.0", "source": "3.0", "target": "0.0", "start": 99, "end": 100, "weight": 1}], "nodes": [{"uid": "3.0", "start": -1, "end": 100, "color": "#000000"}, {"uid": "0.0", "start": -1, "end": 100, "color": "#785028"}, {"uid": "1.0", "start": -1, "end": 100, "color": "#f0a050"}, {"uid": "4.0", "start": -1, "end": 100, "color": "#68f078"}, {"uid": "2.0", "start": -1, "end": 100, "color": "#e040a0"}]}
+const config = {"node_labels": ["3.0", "0.0", "1.0", "4.0", "2.0"], "node_color": {"3.0": "#000000", "0.0": "#785028", "1.0": "#f0a050", "4.0": "#68f078", "2.0": "#e040a0"}, "start": -1, "end": 99, "delta": 500, "directed": true, "curved": true, "selector": "#xa1310ab7735941618eccfc484edc8061"}
+console.log("Temporal Network Template");
+/* Resources
+   https://bl.ocks.org/mapio/53fed7d84cd1812d6a6639ed7aa83868
+   https://codepen.io/smlo/pen/JdMOej
+   https://observablehq.com/@d3/temporal-force-directed-graph
+*/
+
+// console.log(data);
+
+// variables from the config file
+const selector = config.selector;
+const width = config.width || 800;
+const height = config.height || 600;
+const delta = config.delta || 300;
+
+// variables for the temporal components
+const startTime = config.start;
+const endTime = config.end;
+const targetValue = config.intervals || 300;
+const duration = config.delta || 300;  
+
+// variables for the edge components
+const curved = config.curved || false;
+const directed = config.directed || false;
+
+/* Create a svg element to display the network */
+let svg = d3.select(selector)
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+/*Container to store d3js objects */
+let container = svg.append("g");
+
+/*Link creation template */
+let edges = container.append("g").attr("class", "edges")
+    .selectAll(".link");
+
+/*Node creation template */
+let nodes = container.append("g").attr("class", "nodes")
+    .selectAll("circle.node");
+
+/*Label creation template */
+let labels = container.append("g").attr("class", "labels")
+    .selectAll(".label");
+
+/*Time counter */
+let text = svg.append("text")
+    .text("T="+startTime)
+    .attr("x", 20)
+    .attr("y", 20);
+
+let bttn = svg.append("text")
+    .attr("x",70)
+    .attr("y", 20)
+    .text("Play");
+
+/*Assign data to variable*/
+let network = data
+
+
+/*Create arrow head with same color as the edge */
+function marker (color) {
+       var reference;
+       svg.append("svg:defs").selectAll("marker")
+          .data([reference])
+          .enter().append("svg:marker")
+          .attr("id", "arrow"+color)
+          .attr("viewBox", "0 -5 10 10")
+          .attr("refX", 10)
+          .attr("refY", -0)
+          .attr("markerWidth", 6)
+          .attr("markerHeight", 6)
+          .attr("orient", "auto")
+          .append("svg:path")
+          .attr('class','.arrow')
+          .attr("d", "M0,-5L10,0L0,5")
+          .style('opacity',1)
+          .style("fill", color);
+       return "url(#" + "arrow"+color + ")";
+     };
+
+/*Render function to show dynamic networks*/
+function render(){
+
+    // get network data
+    let nodeData = network.nodes;
+    let edgeData = network.edges;
+    // let labelData = network.nodes;
+
+    // render network objects
+    renderNodes(nodeData);
+    renderEdges(edgeData);
+    renderLabels(nodeData);
+
+    // run simulation
+    simulation.nodes(nodeData);
+    simulation.force("links").links(edgeData);
+    simulation.alpha(1).restart();
+}
+
+/*Render node objects*/
+function renderNodes(data){
+    // console.log("render Nodes")
+    
+    nodes = container.select('.nodes').selectAll('circle.node').data(data,d=>d.uid);
+
+    let new_nodes = nodes.enter().append("circle")
+        .attr("class", "node")
+        .style("r", function(d){  return d.size+"px"; })
+        .style("fill", d => d.color)
+        .style("opacity", d => d.opacity)
+        .call(drag);
+    
+    nodes.exit()
+        .transition() // transition to shrink node
+        .duration(delta)
+        .style("r", "0px")
+        .remove();
+    
+    nodes = nodes.merge(new_nodes);
+
+    nodes.transition() // transition to change size and color
+        .duration(delta)
+        .style("r", function(d){  return d.size+"px"; })
+        .style("fill", d => d.color)
+        .style("opacity", d => d.opacity);
+};
+
+/*Render label objects*/
+function renderLabels(data){
+    // console.log("render Nodes")
+    
+    labels = container.select('.nodes').selectAll('.label-text').data(data, d=> d.uid);
+
+    let new_labels = labels.enter().append("text")
+        .attr("class", "label-text")
+        .attr("x", function(d) {
+            var r = (d.size === undefined) ? 15 : d.size;
+            return 5 + r; })
+        .attr("dy", ".32em")
+        .text(d=>d.label);
+    
+    labels.exit().remove();
+
+    labels = labels.merge(new_labels);
+};
+
+/*Render edge objects*/
+function renderEdges(data){
+    // console.log("render Edges")
+    edges = container.select(".edges").selectAll(".link").data(data, d=> d.uid);
+
+    let new_edges =  edges.enter().append("path")
+        .attr("class", "link")
+        .style("stroke", d => d.color)
+        .style("stroke-opacity", d => d.opacity)
+        .style("stroke-width", d => d.size)
+        .style("fill","none")
+        .attr("marker-end", function (d) {if(directed){return marker(d.color)}else{return null}; });
+
+    edges.exit().remove();
+
+    edges = edges.merge(new_edges);
+
+    edges.transition() // transition to change size and color
+        .duration(delta)
+        .style("stroke", d => d.color)
+        .style("stroke-opacity", d => d.opacity)
+        .style("stroke-width", d => d.size);
+};
+
+/*Add zoom function to the container */
+svg.call(
+    d3.zoom()
+        .scaleExtent([.1, 4])
+        .on("zoom", function() { container.attr("transform", d3.event.transform); })
+).on("dblclick.zoom", null);
+
+
+/*Simulation of the forces*/
+const simulation = d3.forceSimulation()
+      .force("charge", d3.forceManyBody().strength(-3000))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("x", d3.forceX(width / 2).strength(1))
+      .force("y", d3.forceY(height / 2).strength(1))
+      .force("links", d3.forceLink()
+             .id( d => d.uid)
+             .distance(50).strength(1))
+      .on("tick", ticked);
+
+
+/*Update of the node and edge objects*/
+function ticked() {
+    nodes.call(updateNodePositions);
+    edges.call(updateEdgePositions);
+    labels.call(updateLabelPositions);
+};
+
+/*Update link positions */
+function updateEdgePositions(edges) {
+    // edges
+    //     .attr("x1", d => d.source.x)
+    //     .attr("y1", d => d.source.y)
+    //     .attr("x2", d => d.target.x)
+    //     .attr("y2", d => d.target.y);
+
+    edges.attr("d", function(d) {
+        var dx = d.target.x - d.source.x,
+            dy = d.target.y - d.source.y,
+            dr = Math.sqrt(dx * dx + dy * dy);
+        if(!curved)dr=0;
+        return "M" +
+            d.source.x + "," +
+            d.source.y + "A" +
+            dr + "," + dr + " 0 0,1 " +
+            d.target.x + "," +
+            d.target.y;
+    });
+
+    // recalculate and back off the distance
+    edges.attr("d", function (d, i) {
+        var pl = this.getTotalLength();
+        var r = (d.target.size === undefined) ? 15 : d.target.size;
+        var m = this.getPointAtLength(pl - r);
+        var dx = d.target.x - d.source.x,
+            dy = d.target.y - d.source.y,
+            dr = Math.sqrt(dx * dx + dy * dy);
+        if(!curved)dr=0;
+        var result = "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + m.x + "," + m.y;
+        return result;
+    });
+};
+
+/*Update node positions */
+function updateNodePositions(nodes) {
+    nodes.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    });
+    // nodes
+    //     .attr("cx", d => d.x)
+    //     .attr("cy", d => d.y);
+};
+
+
+/*Update node positions */
+function updateLabelPositions(labels) {
+    labels.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+    });
+};
+
+/*Add drag functionality to the node objects*/
+const drag = d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
+
+function dragstarted(d) {
+    d3.event.sourceEvent.stopPropagation();
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+};
+
+function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+};
+
+function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+};
+
+
+/*Temporal components*/
+let currentValue = 0;
+let time = startTime;
+var timer = null;
+
+var x = d3.scaleLinear()
+    .domain([startTime,endTime])
+    .range([0,targetValue])
+    .clamp(true);
+
+let step = function () {
+    // increase time value
+    currentValue = currentValue + (targetValue/endTime);
+    // convert time value to time step
+    time = x.invert(currentValue);
+    // update the network
+    update();
+    // stop the timer
+    if (currentValue >= targetValue) {
+        timer.stop();
+        currentValue = 0;
+        bttn.text("Play")
+        text.text(d => "T="+startTime);
+        console.log("End of the timer");
+    };
+};
+
+contains = ({start, end}, time) => start <= time && time < end
+
+function update(){
+    console.log("update Network");
+    console.log(time);
+
+    // Make copy to don't lose the data
+    let copy = {...data};
+    // TODO Instead of copy make a map to keep object properties
+    network=copy;
+    network.nodes = copy.nodes.filter(d => contains(d,time));
+    network.edges = copy.edges.filter(d => contains(d,time));
+    text.text(d => "T="+Math.round(time));
+    render();
+};
+
+bttn.on('click', function() {
+    if (bttn.text() == "Pause") {
+        timer.stop();
+        bttn.text("Play");
+    }else{
+        runTimer();
+    };
+  
+});
+
+function runTimer(){
+    timer = d3.interval(step,duration);
+    bttn.text("Pause");
+}
+
+runTimer();
+
+// initialize timer
+//let timer = d3.interval(step,duration);
+
+}); //END
+
+</script>
